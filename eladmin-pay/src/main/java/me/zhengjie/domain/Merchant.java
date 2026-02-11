@@ -1,0 +1,107 @@
+/*
+ *  Copyright 2019-2025 Zheng Jie
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+package me.zhengjie.domain;
+
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Getter;
+import lombok.Setter;
+import me.zhengjie.base.BaseEntity;
+
+import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.Objects;
+import java.util.Set;
+
+/**
+ * @author Zheng Jie
+ * @date 2018-11-22
+ */
+@Entity
+@Getter
+@Setter
+@Table(name = "sys_user")
+public class Merchant extends BaseEntity implements Serializable {
+    public static final Long MERCHANT_DEPT_ID = 18L;
+
+    @Id
+    @Column(name = "user_id")
+    @NotNull(groups = Update.class)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ApiModelProperty(value = "ID", hidden = true)
+    private Long id;
+
+    @Column(name = "dept_id")
+    private Long deptId = MERCHANT_DEPT_ID;
+
+//    @ManyToMany(fetch = FetchType.EAGER)
+//    @ApiModelProperty(value = "用户角色")
+//    @JoinTable(name = "sys_users_roles",
+//            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")},
+//            inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "role_id")})
+//    private Set<Role> roles;
+
+    @Column(unique = true)
+    @ApiModelProperty(value = "商户id")
+    private String username;
+
+    @NotBlank
+    @ApiModelProperty(value = "用户昵称")
+    private String nickName;
+
+    @Email
+    @NotBlank
+    @ApiModelProperty(value = "邮箱")
+    private String email;
+
+    @ApiModelProperty(value = "头像真实名称", hidden = true)
+    private String avatarName;
+
+    @ApiModelProperty(value = "头像存储的路径", hidden = true)
+    private String avatarPath;
+
+    @ApiModelProperty(value = "密码")
+    private String password;
+
+    @NotNull
+    @ApiModelProperty(value = "是否启用")
+    private Boolean enabled;
+
+    @Column(name = "pwd_reset_time")
+    @ApiModelProperty(value = "最后修改密码的时间", hidden = true)
+    private Date pwdResetTime;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Merchant user = (Merchant) o;
+        return Objects.equals(id, user.id) &&
+                Objects.equals(username, user.username);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, username);
+    }
+}
