@@ -56,8 +56,6 @@ public class MerchantController {
     private final PasswordEncoder passwordEncoder;
     private final MerchantService merchantService;
     private final MerchantRepository merchantRepository;
-//    private final DataService dataService;
-//    private final RoleService roleService;
 
     @ApiOperation("查询商户列表")
     @GetMapping
